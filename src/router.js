@@ -10,9 +10,11 @@ const Router = (routes, notFound = PageNotFound) => {
   return routes[URL] || routes[reduceParameterUrl(URL)] || notFound; // TODO reduce parameter url
 };
 
-/// Takes in a route's URL and returns the variable names.
-/// Example:
-/// getParameterNamesFromRoute("/{variableOne}/{variableTwo}") returns ["variableOne", "variableTwo"]
+/** Takes in a route's URL and returns the variable names.
+ * @param {string} routeUrl a string representing a route
+ * @returns {array<string>} parNames an array of the parameter names contained in the routeUrl.
+ * getParameterNamesFromRoute("/{variableOne}/{variableTwo}") returns ["variableOne", "variableTwo"]
+ */
 const getParameterNamesFromRoute = routeUrl => {
   let routeLetters = routeUrl.split("");
   let numOpeningBrackets = routeLetters.filter(x => x === "{").length;
@@ -22,7 +24,7 @@ const getParameterNamesFromRoute = routeUrl => {
     return { status: false, error: "Malformed route, mismatched brackets" };
   }
   // Get names of variables from object
-  let varNames = [];
+  let parNames = [];
   let letterStack = [];
   for (const letter of routeLetters) {
     letterStack.push(letter);
@@ -35,7 +37,7 @@ const getParameterNamesFromRoute = routeUrl => {
       if (!validateVarName(tmpVarName)) {
         throw `Invalid var name ${tmpVarName} in route ${routeUrl}`;
       }
-      varNames.push(tmpVarName);
+      parNames.push(tmpVarName);
       letterStack.pop(); // get rid of the opening bracket
       // Before a variable name, we need a slash to differentiate the names
       let shouldBeSlash = letterStack.pop();
@@ -45,7 +47,7 @@ const getParameterNamesFromRoute = routeUrl => {
     }
   }
 
-  return varNames;
+  return parNames;
 };
 
 /// Makes sure a variable name is valid, i.e. it has no disallowed characters
