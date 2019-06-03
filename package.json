@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run build && jest",
-    "build": "babel src -d lib"
+    "build": "babel src -d lib",
+    "format": "prettier --write src/*.js test/*.js"
   },
   "keywords": [
     "router",
@@ -20,6 +21,7 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "babel-jest": "^24.8.0",
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "prettier": "^1.17.1"
   }
 }
