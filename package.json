@@ -1,0 +1,25 @@
+{
+  "name": "router-lite",
+  "version": "0.0.1",
+  "description": "A lightweight router for React projects.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm run build && jest",
+    "build": "babel src -d lib"
+  },
+  "keywords": [
+    "router",
+    "lightweight",
+    "lite",
+    "route"
+  ],
+  "author": "Alexander Hansen",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0"
+  }
+}
