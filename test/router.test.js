@@ -1,7 +1,12 @@
 import { test } from "../lib/router";
-
+// TODO test actual contents of returns
 describe("Function tests", () => {
   describe("getParameterNamesFromRoute tests", () => {
+    it("should return no variable names", () => {
+      expect(
+        test.getParameterNamesFromRoute("/testPath/notAVarName/test/").length
+      ).toBe(0);
+    });
     it("should return a single variable name", () => {
       expect(
         test.getParameterNamesFromRoute("/testPath/{varName}/test/").length
@@ -32,6 +37,14 @@ describe("Function tests", () => {
     });
     it("should throw an error due to improper var names", () => {
       expect(() => test.getParameterNamesFromRoute("/{var{1}}/")).toThrow();
+    });
+  });
+  describe("getPathReductions tests", () => {
+    it("should return three reductions", () => {
+      expect(test.getPathReductions("/three/reductions/").length).toBe(3);
+    });
+    it("should return zero reductions", () => {
+      expect(test.getPathReductions("").length).toBe(0);
     });
   });
 });
