@@ -1,6 +1,5 @@
 import PageNotFound from "./page-not-found";
 /// Routes should be in the form of { path : component }
-/// TODO support URL params w/ lambda components, get rid of exports and test in a smarter way
 /** Constructs a router which returns a function based on the current path in the browser.
  * @param {Object<string>} routes an object of the form { routeUrl : function }
  * @returns {function} result a function which, when executed, provides the desired content.
@@ -74,45 +73,30 @@ const validateVarName = name =>
   name.indexOf(";") < 0 &&
   name.indexOf("-") < 0; // TODO more things here
 
-/// Reduces a path to its potential variable-less forms
-/// TODO make this a generator?
-/// TODO this needs to match paths where the variables are in the beginning of the route
-/* putting this on hold as I don't want to add babel-polyfill to my dependencies...:(
-function* getPathReductions(path) {
-   let pathSections = path.split('/');
-   for (let rank = 0; rank < pathSections.length; rank++) {
-       for (let i = 0; i < pathSections.length; i++) {
-           let pathSectionsCopy = [...pathSections];
-           for (let j = 0; j < rank; j++) {
-                pathSectionsCopy[j] = "";
-           }
-           yield pathSectionsCopy.join('/');
-       }
-   }
-}*/
-
-// TODO this needs to be redone
-function getPathReductions(path) {
-  let pathSections = path.split("/");
-  let reductions = [];
-  for (let rank = 0; rank < pathSections.length; rank++) {
-    for (let i = 0; i < pathSections.length; i++) {
-      let pathSectionsCopy = [...pathSections];
-      for (let j = 0; j < rank; j++) {
-        pathSectionsCopy[i + (j % pathSections.length)] = "";
-      }
-      pathSectionsCopy = pathSectionsCopy.slice(0, pathSections.length);
-      reductions = [...reductions, pathSectionsCopy.join("/")];
-    }
-  }
-  return [...new Set(reductions)];
-}
-
 /** Matches a path to one of the routes in the object, if it exists, and passes the args into it
  * @param {string} currentPath the current path in the browser
  * @param {Object<string, function>} paramRoutes the reduced variable routes object
  * @returns {function} result a function that, when executed, gives the desired output
- * TODO needs major refactor - path matching is different with and without trailing slash
+ * Perhaps this could be a generator in the future? I don't want to have to include a polyfill
+ */
+function getPathReductions(path) {
+    let pathSections = path.split('/');
+    let reductions = [];
+    for (let i = 0; i < pathSections.length; i++) {
+        let option = [...pathSections];
+        for (let j = pathSections.length - 1; j >= pathSections.length - i; j--) {
+            option[j] = '';
+        }
+        reductions.push(option.join('/'));
+    }
+    return [...new Set(reductions)];
+}
+
+/* Matches a path with parameters to a route
+ * @param {string} currentPath the current path in thet  browser
+ * @param {Array<string>} paramRoutes the parameter routes generated earlier
+ * @param {Array<string>} routes the routes passed into the router.
+ * @returns {function} the result of the matching.
  */
 const matchParamPath = (currentPath, paramRoutes, routes) => {
   for (const reduction of getPathReductions(currentPath)) {

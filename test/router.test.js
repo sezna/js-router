@@ -40,23 +40,21 @@ describe("getParameterNamesFromRoute tests", () => {
 });
 describe("getPathReductions tests", () => {
   it("should return four reductions", () => {
-    /* /four/reductions/ /four// //reductions/ /// */
     let reductions = test.getPathReductions("/four/reductions/");
-    expect(test.getPathReductions("/four/reductions/").length).toBe(4);
+    expect(test.getPathReductions("/four/reductions/").length).toBe(3);
   });
-  it("should return zero reductions", () => {
+  it("should return a reduction", () => {
     expect(test.getPathReductions("").length).toBe(1);
   });
 });
 describe("matchParamPath tests", () => {
   const paramRoutes = {
     "/param/route//": "/param/route/{var1}",
-    "///other/param/route": "/{var1}/{var2}/other/param/route"
+    "/other/param/route///": "/other/param/route/{var1}/{var2}"
   };
-
   const routes = {
     "/param/route/{var1}": () => 1,
-    "/{var1}/{var2}/other/param/route": ({ var1, var2 }) => var1 + var2
+    "/other/param/route/{var1}/{var2}": ({ var1, var2 }) => var1 + var2
   };
   it("should return the number 1", () => {
     console.log(test.matchParamPath("/param/route/param", paramRoutes, routes));
@@ -64,14 +62,9 @@ describe("matchParamPath tests", () => {
       test.matchParamPath("/param/route/param/", paramRoutes, routes)
     ).toBe(1);
   });
-  it("should return the number 1", () => {
-    expect(
-      test.matchParamPath("/param/route/param/", paramRoutes, routes)
-    ).toBe(1);
-  });
   it("should concat the string params in the path (ab)", () => {
     expect(
-      test.matchParamPath("/a/b/other/param/route", paramRoutes, routes)
+      test.matchParamPath("/other/param/route/a/b/", paramRoutes, routes)
     ).toBe("ab");
   });
 });
