@@ -30,7 +30,9 @@ As you can see in the example above, pass in an object specifying your routes an
 A parameter route is a route that includes variables you will pass into your component, like the `postID` seen in the above example. Parameters in a route must have their own "section" in between two slashes.
 * Valid parameter route: `/{var1}/{var2}`
 * _Invalid_ parameter route: `/{var1}{var2}`.
+
 This is because the matching algorithm needs to know where one parameter ends and the next begins. Additionally, parameters must come at the _end_ of a route.
+
 * Valid parameter route: `/my/path/{var1}`
 * Invalid parameter route: `/{var1}/my/path`
 This decision was made to simplify the path matching algorithm, and in the spirit of this being a lightweight router, I think this constraint is not too bad. I welcome PRs that solve this problem, though!
