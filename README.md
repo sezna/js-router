@@ -1,7 +1,7 @@
-# JS-Router
-This project is a lighter weight alternative to the feature-rich routers like React Router. It has no dependencies and only provides basic routing capabilities. It supports URL parameters and provides an overrideable 404 page. A Link component is also included.
+# Why JS-Router?
+This project is a lighter weight alternative to the feature-rich routers like React Router. It has _no_ dependencies (none at all!) and only provides basic routing capabilities. It supports URL parameters and provides an overrideable 404 page. A Link component is also included (or, will be in the future). 
 
-It is currently a huge WIP and isn't ready for release yet
+It is currently a WIP and isn't ready for release yet
 
 # Usage
 The router takes two parameters: an object specifying paths to components and an optional 404 page component if it doesn't find anything for the current path. By default, it will just return a "404 page not found" string if it doesn't find anything.
