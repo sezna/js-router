@@ -16,11 +16,7 @@ const ComponentRouter = Router({
       '/blog/post/{postID}': BlogPostPage
 });
 
-const App = () => {
-    return <ThemeContext.Provider value={themes.warm}>
-                <ComponentRouter />
-           </ThemeContext.Provider>
-}
+const App = () => <ComponentRouter />
 ```
 
 ## Basic Routes
