@@ -59,12 +59,12 @@ describe("matchParamPath tests", () => {
   it("should return the number 1", () => {
     console.log(test.matchParamPath("/param/route/param", paramRoutes, routes));
     expect(
-      test.matchParamPath("/param/route/param/", paramRoutes, routes)
+      test.matchParamPath("/param/route/param/", paramRoutes, routes)()
     ).toBe(1);
   });
   it("should concat the string params in the path (ab)", () => {
     expect(
-      test.matchParamPath("/other/param/route/a/b/", paramRoutes, routes)
+      test.matchParamPath("/other/param/route/a/b/", paramRoutes, routes)()
     ).toBe("ab");
   });
 });

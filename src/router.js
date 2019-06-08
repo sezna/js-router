@@ -11,20 +11,25 @@ import PageNotFound from "./page-not-found";
 const Router = (routes, notFound = PageNotFound) => {
   let URL = window.location.pathname;
   let paramRoutes = {};
-  for (const route of routes) {
+  for (let i = 0; i < Object.keys(routes).length; i++) {
     // If a route contains brackets, then it has parameters. If it has parameters, then they should be removed and added to paramRoutes which contains the real route.
     // paramRoutes contains { routeWithoutVarNames : routeWithVarNames }
-    paramRoutes[removeParNames(route)] = route;
+    paramRoutes[removeParNames(Object.keys(routes)[i])] = Object.keys(routes)[
+      i
+    ];
   }
   return routes[URL] || matchParamPath(URL, paramRoutes, routes) || notFound; // TODO reduce parameter url
 };
 
 const removeParNames = route => {
   // While an opening bracket still exists, keep slicing out anything between a { and a }
-  while (route.indexOf("{") >= 0) {
-    route =
-      route.slice(0, route.indexOf("{")) + route.slice(route.indexOf("{") + 1);
+  let routeCopy = route;
+  while (routeCopy.indexOf("{") >= 0) {
+    routeCopy =
+      routeCopy.slice(0, routeCopy.indexOf("{")) +
+      routeCopy.slice(routeCopy.indexOf("}") + 1);
   }
+  return routeCopy;
 };
 
 /** Takes in a route's URL and returns the variable names.
@@ -80,16 +85,16 @@ const validateVarName = name =>
  * Perhaps this could be a generator in the future? I don't want to have to include a polyfill
  */
 function getPathReductions(path) {
-    let pathSections = path.split('/');
-    let reductions = [];
-    for (let i = 0; i < pathSections.length; i++) {
-        let option = [...pathSections];
-        for (let j = pathSections.length - 1; j >= pathSections.length - i; j--) {
-            option[j] = '';
-        }
-        reductions.push(option.join('/'));
+  let pathSections = path.split("/");
+  let reductions = [];
+  for (let i = 0; i < pathSections.length; i++) {
+    let option = [...pathSections];
+    for (let j = pathSections.length - 1; j >= pathSections.length - i; j--) {
+      option[j] = "";
     }
-    return [...new Set(reductions)];
+    reductions.push(option.join("/"));
+  }
+  return [...new Set(reductions)];
 }
 
 /* Matches a path with parameters to a route
@@ -120,7 +125,7 @@ const matchParamPath = (currentPath, paramRoutes, routes) => {
           ] = pathSections[sectionIndex];
         }
       }
-      return routes[paramRoutes[reduction]](parameters);
+      return () => routes[paramRoutes[reduction]](parameters);
     }
   }
 };
